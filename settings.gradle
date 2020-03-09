@@ -1,0 +1,4 @@
+rootProject.name='newLocation'
+include ':app'
+include ':mvp'
+include ':core'
