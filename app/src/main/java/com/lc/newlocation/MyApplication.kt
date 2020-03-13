@@ -1,6 +1,9 @@
 package com.lc.newlocation
 
 import android.app.Application
+import com.baidu.mapapi.CoordType
+import com.baidu.mapapi.ModuleName
+import com.baidu.mapapi.OpenLogUtil
 import com.baidu.mapapi.SDKInitializer
 
 /**
@@ -12,5 +15,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         SDKInitializer.initialize(this)
+        SDKInitializer.setCoordType(CoordType.BD09LL)
+//        OpenLogUtil.setModuleLogEnable(ModuleName.TILE_OVERLAY_MODULE,true)
     }
 }

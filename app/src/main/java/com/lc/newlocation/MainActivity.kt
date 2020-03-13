@@ -1,18 +1,19 @@
 package com.lc.newlocation
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.baidu.mapapi.map.BaiduMap
+import androidx.fragment.app.Fragment
 import com.baidu.mapapi.map.MapView
 import com.lc.mvp.BaseActivity
+import com.lc.newlocation.fragment.BluetoothStudyFragment
+import com.lc.newlocation.fragment.MapFragment
 import com.lc.newlocation.mvp.IMainView
 import com.lc.newlocation.mvp.presenter.IMainPresenter
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<IMainView, IMainPresenter>() {
     private lateinit var mBaiduMap: MapView
-
+    private var mapFragment:Fragment = MapFragment()
+    private val blueTooth:Fragment by lazy { BluetoothStudyFragment() }
 
     override fun createPresenter(): IMainPresenter? = IMainPresenter()
 
@@ -22,22 +23,24 @@ class MainActivity : BaseActivity<IMainView, IMainPresenter>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBaiduMap = baiduMap
+//        mBaiduMap = baiduMap
+        showFragment(blueTooth,R.id.map_container)
     }
 
     override fun onResume() {
         super.onResume()
-        mBaiduMap.onResume()
+//        mBaiduMap.onResume()
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mBaiduMap.onDestroy()
+//        mBaiduMap.onDestroy()
     }
 
     override fun onPause() {
         super.onPause()
-        mBaiduMap.onPause()
+//        mBaiduMap.onPause()
     }
 
 }

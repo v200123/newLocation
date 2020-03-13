@@ -10,14 +10,14 @@ import java.lang.ref.WeakReference
  */
 open class BasePresenter<in V : IBaseView> : IBasePresenter {
 
-    private var mView: V? = null
+    protected var mView: V? = null
         get() {
             if (field == null)
                 throw IllegalArgumentException("当前View没有加入") else return field
         }
     private var weakReference: WeakReference<V>? =  null
 
-    fun attView(view: V) {
+    fun attView(view: <V>) {
         view.let {
             weakReference = WeakReference(view)
             this.mView = weakReference!!.get()
