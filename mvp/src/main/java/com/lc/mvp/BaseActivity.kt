@@ -3,6 +3,7 @@ package com.lc.mvp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.kongzue.dialog.v3.WaitDialog
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog
 
 /**
@@ -10,9 +11,9 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog
 @author admin
 @date 2020/3/9
  */
-abstract class BaseActivity<out V : IBaseView, out P : BasePresenter< V>> : AppCompatActivity(),
+abstract class BaseActivity<V : IBaseView, out P : BasePresenter< V>> : AppCompatActivity(),
     IBaseView {
-    private var mLoading: QMUIDialog? = null
+//    private var mLoading: QMUIDialog? = null
     private var mPresenter: P? = null
     private val Fragments = listOf<Fragment>()
 
@@ -35,14 +36,11 @@ abstract class BaseActivity<out V : IBaseView, out P : BasePresenter< V>> : AppC
 
     protected abstract fun createPresenter(): P?
     override fun showLoading() {
-        if (mLoading == null) {
-            mLoading = QMUIDialog(getContext())
-        }
-        mLoading!!.show()
+      WaitDialog.show(getContext() as AppCompatActivity,"").setTipTime(2000)
     }
 
     override fun hideLoading() {
-        mLoading!!.hide()
+      WaitDialog.dismiss()
     }
 
     fun showFragment(fragment: Fragment,containerId : Int):Int =

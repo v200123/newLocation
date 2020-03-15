@@ -12,7 +12,8 @@ import androidx.fragment.app.Fragment
 @author admin
 @date 2020/3/10
  */
-abstract class BaseFragment< out V : IBaseView, P : BasePresenter<out V>> : Fragment(), IFragmentView {
+@Suppress("UNCHECKED_CAST")
+abstract class BaseFragment<  V : IFragmentView, P : BasePresenter<V>> : Fragment(), IFragmentView {
     private lateinit var context: Context
     protected lateinit var mPresenter: P
     private var rootView: View? = null

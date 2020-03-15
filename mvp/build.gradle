@@ -34,6 +34,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     api 'com.qmuiteam:qmui:2.0.0-alpha05'
+    api  'com.kongzue.dialog_v3x:dialog:3.1.8'
+
 
 
 }

@@ -4,12 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     signingConfigs {
-        debug {
-            storeFile file('D:\\lc`key\\location.jks')
-            storePassword '12345678'
-            keyAlias = 'key'
-            keyPassword '12345678'
-        }
+
+    debug {
+//        storeFile file('K:\\lc`key\\location.jks')
+//        storePassword '123456'
+//        keyAlias = 'key'
+//        keyPassword '123456'
+    }
     }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
