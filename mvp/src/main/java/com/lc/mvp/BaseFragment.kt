@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.kongzue.dialog.v3.WaitDialog
 
 /**
 @packageName com.lc.mvp
@@ -13,7 +15,7 @@ import androidx.fragment.app.Fragment
 @date 2020/3/10
  */
 @Suppress("UNCHECKED_CAST")
-abstract class BaseFragment<  V : IFragmentView, P : BasePresenter<V>> : Fragment(), IFragmentView {
+abstract class BaseFragment<V : IFragmentView, P : BasePresenter<V>> : Fragment(), IFragmentView {
     private lateinit var context: Context
     protected lateinit var mPresenter: P
     private var rootView: View? = null
@@ -33,6 +35,14 @@ abstract class BaseFragment<  V : IFragmentView, P : BasePresenter<V>> : Fragmen
         mPresenter.attView(this as V)
         initData()
         return rootView
+    }
+
+    override fun showLoading() {
+        WaitDialog.show(context as AppCompatActivity, "").setTipTime(2000)
+    }
+
+    override fun hideLoading() {
+        WaitDialog.dismiss()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
