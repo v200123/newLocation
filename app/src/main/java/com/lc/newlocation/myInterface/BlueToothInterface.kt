@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothManager
 @date 2020/3/16
  */
 interface BlueToothInterface {
-    fun connection(mac :String, bluetoothDevice: BluetoothDevice)
-
+    fun connection(mac :String): Boolean
+    fun disConnection()
+    fun sendmsg(msg:ByteArray)
 }

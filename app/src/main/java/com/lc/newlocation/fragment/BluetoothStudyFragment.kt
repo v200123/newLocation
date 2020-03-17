@@ -20,6 +20,7 @@ import com.lc.newlocation.R
 import com.lc.newlocation.bean.BlueToothBean
 import com.lc.newlocation.mvp.IBluetoothView
 import com.lc.newlocation.mvp.presenter.BluetoothPresenter
+import com.lc.newlocation.myInterface.impl.TraditionBlueToothImpl
 import com.qmuiteam.qmui.widget.pullRefreshLayout.QMUIPullRefreshLayout
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_bluetooth_study.*
@@ -67,10 +68,17 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
             .setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
             .request()
-
+        blueAdapter = BlueAdapter(R.layout.fragment_rv_bluetooth_item)
     }
 
     override fun initView() {
+
+        btn_send.setOnClickListener{
+
+            mPresenter.send(et_sendMsg.text.toString())
+
+        }
+
         pull_to_refresh.setOnPullListener(object : QMUIPullRefreshLayout.OnPullListener {
             override fun onMoveRefreshView(offset: Int) {
 
@@ -83,14 +91,25 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
             }
         })
         mPresenter.openBlueTooth(context)
-        blueAdapter = BlueAdapter(R.layout.fragment_rv_bluetooth_item)
+
         rv_BlueTooth.apply {
             adapter = blueAdapter
             layoutManager = LinearLayoutManager(context)
         }
+        blueAdapter.setOnItemClickListener{adapter, view, position ->
+            run {
+                val blueToothBean = adapter.data[position] as BlueToothBean
+                if(blueToothBean.drawableId == R.drawable.bluetooth_type_01)
+                    mPresenter.blueToothInterface = TraditionBlueToothImpl()
+                mPresenter.connect(blueToothBean.address)
+            }
+        }
     }
 
     override fun getLayoutId() = R.layout.fragment_bluetooth_study
+
+
+
 
 
    inner class BlueDevice (var context1 : Context): BroadcastReceiver() {
@@ -112,8 +131,7 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
     }
 
     class BlueAdapter(LayoutId: Int) : BaseQuickAdapter<BlueToothBean, BaseViewHolder>(LayoutId) {
-
-
+        
         override fun convert(helper: BaseViewHolder, item: BlueToothBean) {
             var result = ""
             when(item.State)

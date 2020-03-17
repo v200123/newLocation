@@ -16,6 +16,7 @@ import com.lc.mvp.BasePresenter
 import com.lc.newlocation.R
 import com.lc.newlocation.bean.BlueToothBean
 import com.lc.newlocation.mvp.IBluetoothView
+import com.lc.newlocation.myInterface.BlueToothInterface
 import es.dmoral.toasty.Toasty
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -34,6 +35,8 @@ import java.util.logging.Logger
  */
 class BluetoothPresenter : BasePresenter<IBluetoothView>() {
 
+    var blueToothInterface: BlueToothInterface? = null
+
     fun openBlueTooth(context: Context) {
         val bluetoothManager: BluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE)
                 as BluetoothManager
@@ -46,14 +49,11 @@ class BluetoothPresenter : BasePresenter<IBluetoothView>() {
                     mView?.showError("没有蓝牙设备")
                 } else
 
-
                     if (!adapter.isEnabled) {
                         adapter.enable()
 
                     } else {
-                        mView?.RegisterBroadcast()
-                        adapter.startDiscovery()
-                        val scanCallback =object : ScanCallback() {
+                        val scanCallback = object : ScanCallback() {
                             override fun onScanFailed(errorCode: Int) {
                                 super.onScanFailed(errorCode)
                                 mView?.showError(errorCode.toString())
@@ -63,20 +63,49 @@ class BluetoothPresenter : BasePresenter<IBluetoothView>() {
                                 super.onScanResult(callbackType, result)
                                 val device = result?.device
                                 if (device != null) {
-                                    mView?.addList(BlueToothBean(if(device.name==null) result.scanRecord?.deviceName else device.name
-                                        ,device.address,device.bondState, R.drawable.bluetooth))
+                                    mView?.addList(
+                                        BlueToothBean(
+                                            if (device.name == null) result.scanRecord?.deviceName else device.name
+                                            , device.address, device.bondState, R.drawable.bluetooth
+                                        )
+                                    )
                                 }
                             }
                         }
-                        adapter.bluetoothLeScanner.startScan(scanCallback)
 
-                        Observable.timer(15000,TimeUnit.MILLISECONDS).subscribeOn(Schedulers.single())
+                        adapter.bondedDevices.forEach {
+                            mView?.addList(
+                                BlueToothBean(
+                                    it.name, it.address, it.bondState,
+                                    if (it.type == 1) R.drawable.bluetooth_type_01 else R.drawable.bluetooth
+                                )
+                            )
+                        }
 
-                            .subscribe(object : Observer<Long>{
+                        mView?.RegisterBroadcast()
+                        Observable.just(100L).map {
+                            adapter.startDiscovery()
+                            return@map it
+                        }.delay(10L, TimeUnit.MICROSECONDS).map {
+                            adapter.cancelDiscovery()
+                            adapter.bluetoothLeScanner.startScan(scanCallback)
+                        }.delay(10L,TimeUnit.MICROSECONDS)
+                            .subscribeOn(Schedulers.single())
+                            .subscribe({ adapter.bluetoothLeScanner.startScan(scanCallback)
+                            },{ mView?.showError("出错了")})
+                        adapter.startDiscovery()
+
+
+//                        adapter.bluetoothLeScanner.startScan(scanCallback)
+
+                        Observable.timer(15000, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.single())
+
+                            .subscribe(object : Observer<Long> {
                                 override fun onNext(t: Long?) {
-                                  adapter.bluetoothLeScanner.stopScan(scanCallback)
+                                    adapter.bluetoothLeScanner.stopScan(scanCallback)
                                     adapter.cancelDiscovery()
-                                    Log.d("分发","完毕了")
+                                    Log.d("分发", "完毕了")
                                     mView?.showError("获取完毕")
 
                                 }
@@ -95,16 +124,28 @@ class BluetoothPresenter : BasePresenter<IBluetoothView>() {
 
                             })
 
-
-//                        if (adapter.startDiscovery()) {
-//                            Log.d("蓝牙", "开始了")
-//
-//                        } else {
-//                            Log.d("蓝牙", "蓝牙失败了")
-//                        }
                     }
             }
 
+    }
+
+    fun connect(mac: String) {
+        mView?.showLoading()
+        if (!blueToothInterface!!.connection(mac)) {
+            if (blueToothInterface!!.connection(mac)) {
+                mView?.showError("蓝牙连接错误")
+            } else {
+                mView?.showError("蓝牙连接成功")
+            }
+        } else {
+            mView?.showError("蓝牙连接成功")
+        }
+        mView?.hideLoading()
+    }
+
+
+    fun send(message : String){
+        blueToothInterface?.sendmsg(message.toByteArray())
     }
 }
 

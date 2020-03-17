@@ -6,10 +6,10 @@ android {
     signingConfigs {
 
     debug {
-//        storeFile file('K:\\lc`key\\location.jks')
-//        storePassword '123456'
-//        keyAlias = 'key'
-//        keyPassword '123456'
+        storeFile file('E:\\lc`key\\location.jks')
+        storePassword '123456'
+        keyAlias = 'key'
+        keyPassword '123456'
     }
     }
     compileSdkVersion 29
@@ -21,8 +21,8 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
 
     buildTypes {
@@ -30,6 +30,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
 }
