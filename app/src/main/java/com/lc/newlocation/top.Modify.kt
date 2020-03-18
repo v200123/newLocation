@@ -11,3 +11,6 @@ import java.util.logging.Logger
 fun String.Show()= Log.d("查错",this)
 fun Log.goto(information:String){
     println("出错了")}
+
+
+

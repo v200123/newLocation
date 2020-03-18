@@ -2,12 +2,13 @@ package com.lc.newlocation.fragment
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_STARTED
+import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Looper
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,29 +37,33 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
     lateinit var blueAdapter: BlueAdapter
     override fun createPresenter(): BluetoothPresenter = BluetoothPresenter()
     override fun showError(information: String) {
+        if (Looper.myLooper() != Looper.getMainLooper())
+            Looper.prepare()
         Toasty.error(context, information).show()
     }
 
     override fun RegisterBroadcast() {
-        context.registerReceiver(BlueDevice(context),IntentFilter(BluetoothDevice.ACTION_FOUND))
+        context.registerReceiver(BlueDevice(), IntentFilter(BluetoothDevice.ACTION_FOUND))
+        context.registerReceiver(BlueDevice(), IntentFilter(ACTION_STATE_CHANGED))
     }
 
 
     override fun addList(blueToothBean: BlueToothBean) {
-        var isAdded = false
+        var isAdded = true
         pull_to_refresh.finishRefresh()
-        blueAdapter.data.forEach() {
-            if (it.address == blueToothBean.address) {
-                isAdded = true
-                if (it.name != blueToothBean.name) {
-                    it.name = blueToothBean.name
-                    blueAdapter.notifyDataSetChanged()
-                }
+
+        for (BlueToothBean in blueAdapter.data) {
+            if (blueToothBean.address == blueToothBean.address) {
+                isAdded = false
             }
         }
-        if (!isAdded)
+        if (isAdded)
             blueAdapter.addData(blueToothBean)
 
+    }
+
+    override fun showInformation(information: String) {
+        Toasty.info(context, information).show()
     }
 
     override fun initData() {
@@ -73,7 +78,7 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
 
     override fun initView() {
 
-        btn_send.setOnClickListener{
+        btn_send.setOnClickListener {
 
             mPresenter.send(et_sendMsg.text.toString())
 
@@ -84,9 +89,12 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
 
             }
 
-            override fun onRefresh() {mPresenter.openBlueTooth(context)
+            override fun onRefresh() {
+                mPresenter.openBlueTooth(context)
                 blueAdapter.replaceData(ArrayList<BlueToothBean>())
+
             }
+
             override fun onMoveTarget(offset: Int) {
             }
         })
@@ -96,10 +104,12 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
             adapter = blueAdapter
             layoutManager = LinearLayoutManager(context)
         }
-        blueAdapter.setOnItemClickListener{adapter, view, position ->
+        blueAdapter.setOnItemClickListener { adapter, view, position ->
             run {
                 val blueToothBean = adapter.data[position] as BlueToothBean
-                if(blueToothBean.drawableId == R.drawable.bluetooth_type_01)
+                if (blueToothBean.drawableId == R.drawable.bluetooth_type_01)
+                    mPresenter.blueToothInterface = TraditionBlueToothImpl()
+                else
                     mPresenter.blueToothInterface = TraditionBlueToothImpl()
                 mPresenter.connect(blueToothBean.address)
             }
@@ -109,44 +119,64 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
     override fun getLayoutId() = R.layout.fragment_bluetooth_study
 
 
-
-
-
-   inner class BlueDevice (var context1 : Context): BroadcastReceiver() {
+    inner class BlueDevice() : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            when(intent?.action){
-                ACTION_DISCOVERY_STARTED ->{
+            when (intent?.action) {
+                ACTION_DISCOVERY_STARTED -> {
                 }
-                BluetoothDevice.ACTION_FOUND ->{
-                    val device: BluetoothDevice =
+                BluetoothDevice.ACTION_FOUND -> {
+                    val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    if (device != null) {
                         blueAdapter.addData(
-                            BlueToothBean(if(device.name==null) "不知名" else device.name
-                            ,device.address,device.bondState,if(device.type == 1) R.drawable.bluetooth_type_01 else
-                            R.drawable.bluetooth)
+                            BlueToothBean(
+                                if (device.name == null) "不知名" else device.name
+                                ,
+                                device.address,
+                                device.bondState,
+                                if (device.type == 1) R.drawable.bluetooth_type_01 else
+                                    R.drawable.bluetooth
+                            )
                         )
+                    }
+                }
+                ACTION_STATE_CHANGED -> {
+                    when (intent.getIntExtra(EXTRA_STATE, 0)) {
+                        STATE_OFF -> {
+                            showInformation("蓝牙关闭了")
+
+                        }
+                        STATE_ON -> {
+                            showInformation("蓝牙开启了")
+
+                        }
+                    }
                 }
             }
         }
     }
 
     class BlueAdapter(LayoutId: Int) : BaseQuickAdapter<BlueToothBean, BaseViewHolder>(LayoutId) {
-        
+
         override fun convert(helper: BaseViewHolder, item: BlueToothBean) {
             var result = ""
-            when(item.State)
-            {
-                BluetoothDevice.BOND_NONE ->{result = "未配对"}
-                BluetoothDevice.BOND_BONDED -> { result = "已配对"}
+            when (item.State) {
+                BluetoothDevice.BOND_NONE -> {
+                    result = "未配对"
+                }
+                BluetoothDevice.BOND_BONDED -> {
+                    result = "已配对"
+                }
             }
             helper.setText(R.id.tv_toothName, item.name).setText(R.id.tv_toothAddress, item.address)
-                .setImageDrawable(R.id.imageView,ContextCompat.getDrawable(context,item.drawableId))
-                .setText(R.id.blue_bond,result                )
+                .setImageDrawable(
+                    R.id.imageView,
+                    ContextCompat.getDrawable(context, item.drawableId)
+                )
+                .setText(R.id.blue_bond, result)
         }
 
     }
-
-
 
 
 }

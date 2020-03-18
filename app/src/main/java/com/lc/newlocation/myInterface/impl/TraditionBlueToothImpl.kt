@@ -7,6 +7,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.io.IOException
+import java.lang.Exception
 import java.util.*
 
 /**
@@ -20,22 +22,27 @@ class TraditionBlueToothImpl : BlueToothInterface {
 //            bluetoothmanager.adapter.getRemoteDevice(mac)
         var isSuccess = false
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        socket = bluetoothAdapter.getRemoteDevice(mac)
+        val remoteDevice = bluetoothAdapter.getRemoteDevice(mac)
+        socket = remoteDevice
             .createRfcommSocketToServiceRecord(
                 UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66")
             )
-        Observable.just(1).map {   bluetoothAdapter?.cancelDiscovery()
-                Log.d("蓝牙获取入口","获取入口中")
-                socket.connect() }.subscribeOn(Schedulers.newThread())
-            .subscribe({
+
+//        if(remoteDevice.bondState != BluetoothDevice.BOND_BONDED) {
+        Thread{
+            try {
+                socket.connect()
                 isSuccess = true
-            }, { e ->
-                socket.close()
-                Log.e("蓝牙", e.message)
-                isSuccess = false
-
-            })
-
+            }catch ( e:IOException)
+            {
+                isSuccess =false
+            }
+        }.start()
+//        }
+//        else{
+//            bluetoothAdapter?.cancelDiscovery()
+//            isSuccess = true
+//        }
         return isSuccess
     }
 
@@ -45,13 +52,26 @@ class TraditionBlueToothImpl : BlueToothInterface {
 
     override fun sendmsg(msg: ByteArray) {
 
-      Observable.just(msg).subscribeOn(Schedulers.single()).subscribe({ socket.outputStream .apply { write(msg)
-      flush()
 
-      }
-      },{
-          Log.d("蓝牙传输","传输失败")
-      })
+        Thread{
+            try {
+                socket.outputStream?.write(msg)
+            }catch (e: Exception)
+            {
+                    Log.d("蓝牙发送消息出错","${e.message}")
+            }
+
+        }.start()
+//      Observable.just(1).subscribeOn(Schedulers.newThread()).subscribe({ socket.outputStream?.apply {
+//          Log.d("蓝牙传输","获取到了流接口")
+//          write(msg)
+//      flush()
+//
+//      }
+//      },{
+//
+//          Log.d("蓝牙传输","传输失败")
+//      })
 
     }
 

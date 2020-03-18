@@ -38,7 +38,7 @@ abstract class BaseFragment<V : IFragmentView, P : BasePresenter<V>> : Fragment(
     }
 
     override fun showLoading() {
-        WaitDialog.show(context as AppCompatActivity, "").setTipTime(2000)
+        WaitDialog.show(context as AppCompatActivity, "").setTipTime(20000)
     }
 
     override fun hideLoading() {

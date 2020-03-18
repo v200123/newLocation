@@ -13,4 +13,6 @@ interface IBluetoothView :IFragmentView {
     fun showError(information:String)
     fun RegisterBroadcast()
     fun addList(blueToothBean: BlueToothBean)
+    fun showInformation(information: String)
+
 }
