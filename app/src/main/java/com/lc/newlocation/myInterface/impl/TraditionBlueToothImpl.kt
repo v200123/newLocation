@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.io.DataOutputStream
 import java.io.IOException
 import java.lang.Exception
 import java.util.*
@@ -50,12 +51,14 @@ class TraditionBlueToothImpl : BlueToothInterface {
         socket.close()
     }
 
-    override fun sendmsg(msg: ByteArray) {
+    override fun sendmsg(msg: String) {
 
 
         Thread{
             try {
-                socket.outputStream?.write(msg)
+                val outputStream = socket.outputStream
+                val dataOutputStream = DataOutputStream(outputStream)
+                dataOutputStream.writeUTF(msg)
             }catch (e: Exception)
             {
                     Log.d("蓝牙发送消息出错","${e.message}")

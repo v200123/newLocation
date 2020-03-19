@@ -106,7 +106,7 @@ class BluetoothPresenter : BasePresenter<IBluetoothView>() {
 
 
     fun send(message: String) {
-        blueToothInterface?.sendmsg(message.toByteArray())
+        blueToothInterface?.sendmsg(message)
     }
 
     fun cancel() {

@@ -1,5 +1,7 @@
 package com.lc.mvp
 
+import android.view.View
+
 /**
 @packageName com.lc.mvp
 @author admin
@@ -7,5 +9,5 @@ package com.lc.mvp
  */
 interface IFragmentView : IBaseView {
    fun initData()
-    fun initView()
+    fun initView(view: View)
 }

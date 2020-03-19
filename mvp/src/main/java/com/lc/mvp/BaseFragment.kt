@@ -47,7 +47,7 @@ abstract class BaseFragment<V : IFragmentView, P : BasePresenter<V>> : Fragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        initView(view)
 
     }
 

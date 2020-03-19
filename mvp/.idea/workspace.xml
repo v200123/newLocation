@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="96626e5a-6a55-419b-bb82-abbf54f6c928" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../app/src/main/res/navigation/new_location_01.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/fragment/BluetoothStudyFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/fragment/BluetoothStudyFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/mvp/presenter/BluetoothPresenter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/mvp/presenter/BluetoothPresenter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/myInterface/BlueToothInterface.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/myInterface/BlueToothInterface.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/myInterface/impl/LowBlueToothImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/myInterface/impl/LowBlueToothImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/myInterface/impl/TraditionBlueToothImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/main/java/com/lc/newlocation/myInterface/impl/TraditionBlueToothImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/fragment_bluetooth_study.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/main/res/layout/fragment_bluetooth_study.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1ZKTKvWnwPU2niE4FjNRHXU1FRh" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="96626e5a-6a55-419b-bb82-abbf54f6c928" name="Default Changelist" comment="" />
+      <created>1584586725703</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584586725703</updated>
+    </task>
+    <servers />
+  </component>
+</project>

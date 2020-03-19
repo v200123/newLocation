@@ -1,7 +1,6 @@
 package com.lc.newlocation.fragment
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -9,14 +8,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Looper
-import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.github.jokar.permission.PermissionUtil
 import com.lc.mvp.BaseFragment
-import com.lc.mvp.IBasePresenter
 import com.lc.newlocation.R
 import com.lc.newlocation.bean.BlueToothBean
 import com.lc.newlocation.mvp.IBluetoothView
@@ -25,7 +25,6 @@ import com.lc.newlocation.myInterface.impl.TraditionBlueToothImpl
 import com.qmuiteam.qmui.widget.pullRefreshLayout.QMUIPullRefreshLayout
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_bluetooth_study.*
-import java.util.logging.Logger
 
 /**
 @packageName com.lc.newlocation.fragment
@@ -76,12 +75,14 @@ class BluetoothStudyFragment : BaseFragment<IBluetoothView, BluetoothPresenter>(
         blueAdapter = BlueAdapter(R.layout.fragment_rv_bluetooth_item)
     }
 
-    override fun initView() {
+    override fun initView(view: View) {
 
         btn_send.setOnClickListener {
+          mPresenter.send(et_sendMsg.text.toString())
+        }
 
-            mPresenter.send(et_sendMsg.text.toString())
-
+        btn_goto_Map.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_bluetoothStudyFragment_to_mapFragment)
         }
 
         pull_to_refresh.setOnPullListener(object : QMUIPullRefreshLayout.OnPullListener {

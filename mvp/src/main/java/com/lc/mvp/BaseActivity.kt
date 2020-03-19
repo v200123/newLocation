@@ -1,23 +1,22 @@
 package com.lc.mvp
 
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.kongzue.dialog.v3.WaitDialog
-import com.qmuiteam.qmui.widget.dialog.QMUIDialog
 
 /**
 @packageName com.lc.mvp
 @author admin
 @date 2020/3/9
  */
-abstract class BaseActivity<V : IBaseView, out P : BasePresenter< V>> : AppCompatActivity(),
-    IBaseView {
-//    private var mLoading: QMUIDialog? = null
+abstract class BaseActivity<V : IBaseView, P : BasePresenter< V>> : AppCompatActivity(), IBaseView {
+    //    private var mLoading: QMUIDialog? = null
     private var mPresenter: P? = null
     private val Fragments = listOf<Fragment>()
 
-    @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showLoading()
@@ -36,25 +35,25 @@ abstract class BaseActivity<V : IBaseView, out P : BasePresenter< V>> : AppCompa
 
     protected abstract fun createPresenter(): P?
     override fun showLoading() {
-      WaitDialog.show(getContext() as AppCompatActivity,"").setTipTime(2000)
+        WaitDialog.show(getContext() as AppCompatActivity, "").setTipTime(2000)
     }
 
     override fun hideLoading() {
-      WaitDialog.dismiss()
+        WaitDialog.dismiss()
     }
 
-    fun showFragment(fragment: Fragment,containerId : Int):Int =
+    fun showFragment(fragment: Fragment, containerId: Int): Int =
         supportFragmentManager.run {
             val show = beginTransaction()
             if (fragments.contains(fragment))
-                fragments.forEach { if (it != fragment) show.hide(it)else{
-                    show.show(it)
-                 }
-            }else {
-                show.add(containerId,fragment)
+                fragments.forEach {
+                    if (it != fragment) show.hide(it) else {
+                        show.show(it)
+                    }
+                } else {
+                show.add(containerId, fragment)
             }
             show.commit()
         }
-
 
 }

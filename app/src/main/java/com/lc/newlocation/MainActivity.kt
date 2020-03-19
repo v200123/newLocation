@@ -24,7 +24,7 @@ class MainActivity : BaseActivity<IMainView, IMainPresenter>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        mBaiduMap = baiduMap
-        showFragment(blueTooth,R.id.map_container)
+
     }
 
     override fun onResume() {

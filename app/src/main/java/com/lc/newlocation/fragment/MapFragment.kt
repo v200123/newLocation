@@ -1,15 +1,12 @@
 package com.lc.newlocation.fragment
 
 import android.Manifest
-import android.R.attr.data
-import android.graphics.BitmapFactory
-import android.graphics.BitmapFactory.decodeResource
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.Navigation
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
@@ -66,7 +63,7 @@ class MapFragment : BaseFragment<IMapFragment, IMapPresenter>() {
     }
 
 
-    override fun initView() {
+    override fun initView(view: View) {
         mBaiduMap = map_fragment
         baiduMap = mBaiduMap.map
         baiduMap.isMyLocationEnabled = true
@@ -76,6 +73,11 @@ class MapFragment : BaseFragment<IMapFragment, IMapPresenter>() {
                 , true, null
             )
         )
+
+        showAddress.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_mapFragment_to_lookBatteryFragment)
+        }
+
         baiduMap.setOnMapLongClickListener {
             val decodeResource =
             BitmapDescriptorFactory.fromResource( R.drawable.icon_openmap_mark)

@@ -11,5 +11,5 @@ import android.bluetooth.BluetoothManager
 interface BlueToothInterface {
     fun connection(mac :String): Boolean
     fun disConnection()
-    fun sendmsg(msg:ByteArray)
+    fun sendmsg(msg:String)
 }

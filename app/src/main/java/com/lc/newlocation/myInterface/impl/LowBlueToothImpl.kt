@@ -60,7 +60,7 @@ class LowBlueToothImpl : BlueToothInterface {
         TODO("Not yet implemented")
     }
 
-    override fun sendmsg(msg: ByteArray) {
+    override fun sendmsg(msg: String) {
         TODO("Not yet implemented")
     }
 }
