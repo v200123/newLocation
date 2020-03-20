@@ -52,7 +52,7 @@ class LowBlueToothImpl : BlueToothInterface {
 
     override fun connection(mac: String): Boolean {
         val connectGatt = adapter.getRemoteDevice(mac)
-            .connectGatt(MyApplication.text01.getContext(), true, gattCallback)
+            .connectGatt(MyApplication.getContext(), true, gattCallback)
         return connectGatt!=null
     }
 

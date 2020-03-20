@@ -9,8 +9,9 @@ import java.util.logging.Logger
 @date 2020/3/10
  */
 fun String.Show()= Log.d("查错",this)
-fun Log.goto(information:String){
-    println("出错了")}
+fun Any?.out(){
+    Log.d("dsfsdfsdf",this.toString())
+}
 
 
 
